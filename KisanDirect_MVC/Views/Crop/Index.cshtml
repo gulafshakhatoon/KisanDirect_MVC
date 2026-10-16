@@ -1,0 +1,445 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Crop Marketplace";
+    Layout = null;
+
+    string currentSearch = Request.QueryString["search"] ?? "";
+    string currentSort = Request.QueryString["sortOrder"] ?? "";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kisan Direct - Marketplace</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f0;
+            color: #243424;
+        }
+
+        header {
+            background: #24733b;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+            header h2 {
+                margin: 0;
+            }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 8px;
+            font-weight: bold;
+        }
+
+        .heading {
+            text-align: center;
+            padding: 35px 15px 15px;
+        }
+
+            .heading h1 {
+                color: #24733b;
+            }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .filters {
+            max-width: 700px;
+            margin: 10px auto 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+            .filters input,
+            .filters select {
+                flex: 1;
+                min-width: 180px;
+                padding: 13px;
+                border: 1px solid #bbb;
+                border-radius: 6px;
+                font-size: 15px;
+                background: white;
+            }
+
+            .filters button {
+                padding: 13px 20px;
+                background: #24733b;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+            }
+
+        .crops {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 12px #00000012;
+            border-top: 4px solid #3b914e;
+            overflow-wrap: anywhere;
+        }
+
+            .card h3 {
+                color: #24733b;
+                margin-top: 0;
+            }
+
+        .price {
+            font-size: 23px;
+            font-weight: bold;
+            color: #20753a;
+        }
+
+        .posted-date {
+            font-size: 13px;
+            color: #526354;
+            background: #f3f8f0;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 12px;
+            line-height: 1.7;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #24733b;
+            color: white;
+            padding: 11px 17px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .call-button {
+            display: inline-block;
+            background: #218838;
+            color: white;
+            padding: 10px 14px;
+            margin-top: 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .call-button:hover {
+                background: #17692a;
+            }
+
+        .mobile-number {
+            font-weight: bold;
+            color: #24733b;
+            overflow-wrap: anywhere;
+        }
+
+        .edit-button {
+            display: inline-block;
+            background: #24733b;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 15px;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+            .edit-button:hover {
+                background: #1c542d;
+            }
+
+        .delete-button {
+            background: #dc2626;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+            .delete-button:hover {
+                background: #b91c1c;
+            }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            margin-top: 30px;
+            background: #1c542d;
+            color: white;
+        }
+
+        @@media (max-width: 500px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+                .filters input,
+                .filters select {
+                    width: 100%;
+                }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>🌾 Kisan Direct</h2>
+
+        <nav>
+            <a href="@Url.Action("Index", "Home")">Home</a>
+            <a href="@Url.Action("Index", "Crop")">Marketplace</a>
+            <a href="@Url.Action("Create", "Farmer")">Sell Crops</a>
+            <a href="@Url.Action("Research", "Home")">Research</a>
+            <a href="@Url.Action("About", "Home")">About</a>
+
+            @if (Session["UserId"] != null)
+            {
+                using (Html.BeginForm(
+                    "Logout", "Account",
+                    FormMethod.Post,
+                    new { style = "display:inline;" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            style="background:#fff;color:#24733b;padding:8px 12px;border:0;border-radius:5px;cursor:pointer;">
+                        Logout
+                    </button>
+                }
+            }
+            else
+            {
+                <a href="@Url.Action("Login", "Account")">Login</a>
+            }
+        </nav>
+    </header>
+
+    <section class="heading">
+        <h1>🌱 Crop Marketplace</h1>
+        <p>Discover crops directly from farmers.</p>
+
+        <a class="button"
+           href="@Url.Action("Create", "Farmer")">
+            + Sell Your Crops
+        </a>
+    </section>
+
+    <main class="container">
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="empty">
+                @TempData["Message"]
+            </div>
+        }
+
+        <form class="filters"
+              method="get"
+              action="@Url.Action("Index", "Crop")">
+
+            <input type="text"
+                   name="search"
+                   placeholder="Search crop or location..."
+                   value="@currentSearch" />
+
+            <select name="sortOrder">
+                <option value="" @(currentSort == "" ? "selected" : "")>
+                    Latest Crops
+                </option>
+
+                <option value="price_low"
+                        @(currentSort == "price_low" ? "selected" : "")>
+                    Lowest Price First
+                </option>
+
+                <option value="price_high"
+                        @(currentSort == "price_high" ? "selected" : "")>
+                    Highest Price First
+                </option>
+            </select>
+
+            <button type="submit">Search / Sort</button>
+
+            @if (!string.IsNullOrWhiteSpace(currentSearch) ||
+                 !string.IsNullOrWhiteSpace(currentSort))
+            {
+                <a class="button"
+                   href="@Url.Action("Index", "Crop")">
+                    Clear All
+                </a>
+            }
+        </form>
+
+        @if (ViewBag.Message != null &&
+             !string.IsNullOrEmpty(ViewBag.Message.ToString()))
+        {
+            <div class="empty">
+                @ViewBag.Message
+            </div>
+        }
+        else if (Model == null || Model.Rows.Count == 0)
+        {
+            <div class="empty">
+                <h3>No crops found.</h3>
+                <p>Try another crop name or location.</p>
+            </div>
+        }
+        else
+        {
+            <div class="crops">
+
+                @foreach (System.Data.DataRow crop in Model.Rows)
+                {
+                    <div class="card">
+
+                        <h3>🌾 @crop["CropName"]</h3>
+
+                        @if (crop.Table.Columns.Contains("DateAdded") &&
+                             crop["DateAdded"] != DBNull.Value)
+                        {
+                            DateTime postedDate =
+                                Convert.ToDateTime(crop["DateAdded"]);
+
+                            <p class="posted-date">
+                                🕒 <strong>Posted on:</strong><br />
+                                @postedDate.ToString("dd MMM yyyy")
+                                at
+                                @postedDate.ToString("hh:mm tt")
+                            </p>
+                        }
+
+                        <p class="price">
+                            ₹@Convert.ToDecimal(crop["Price"]).ToString("0.00") / kg
+                        </p>
+
+                        <p>
+                            <strong>Available quantity:</strong>
+                            @crop["Quantity"] kg
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            @crop["Location"]
+                        </p>
+
+                        <p>
+                            <strong>Crop ID:</strong>
+                            @crop["CropId"]
+                        </p>
+
+                        <hr />
+
+                        <p><strong>📞 Farmer Mobile:</strong></p>
+
+                        @if (crop.Table.Columns.Contains("MobileNumber") &&
+                             crop["MobileNumber"] != DBNull.Value &&
+                             !string.IsNullOrWhiteSpace(
+                                 crop["MobileNumber"].ToString()))
+                        {
+                            <p class="mobile-number">
+                                @crop["MobileNumber"]
+                            </p>
+
+                            <a class="call-button"
+                               href="@("tel:" + crop["MobileNumber"].ToString())">
+                                📞 Contact Farmer
+                            </a>
+                        }
+                        else
+                        {
+                            <p>Mobile number not provided.</p>
+                        }
+
+                        @* Owner can manage all crops.
+                            Farmer can manage only their own crops. *@
+
+                        @if (Session["UserId"] != null &&
+                             Session["Role"] != null &&
+                             (
+                                 Session["Role"].ToString() == "Owner" ||
+                                 (
+                                     Session["Role"].ToString() == "Farmer" &&
+                                     crop.Table.Columns.Contains("FarmerId") &&
+                                     crop["FarmerId"] != DBNull.Value &&
+                                     Convert.ToInt32(crop["FarmerId"]) ==
+                                     Convert.ToInt32(Session["UserId"])
+                                 )
+                             ))
+                        {
+                            <a class="edit-button"
+                               href="@Url.Action("Edit", "Crop",
+                                   new { id = crop["CropId"] })">
+                                ✏️ Edit Crop
+                            </a>
+
+                            using (Html.BeginForm(
+                                "Delete",
+                                "Crop",
+                                new { id = crop["CropId"] },
+                                FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="delete-button"
+                                        onclick="return confirm('Are you sure you want to delete this crop?');">
+                                    🗑 Delete Crop
+                                </button>
+                            }
+                        }
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </main>
+
+    <footer>
+        © @DateTime.Now.Year Kisan Direct | Supporting Indian Farmers 🌱
+    </footer>
+
+</body>
+</html>

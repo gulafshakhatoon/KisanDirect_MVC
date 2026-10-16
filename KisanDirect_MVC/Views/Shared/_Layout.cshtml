@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Kisan Direct</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+<style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f8f0;
+        }
+
+        .navbar {
+            background: #218838;
+            padding: 15px 25px;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: white !important;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+            .nav-link:hover {
+                color: #d4edda !important;
+            }
+
+        .logout-button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 9px 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+            .logout-button:hover {
+                background: #bd2130;
+            }
+
+        .body-content {
+            padding-top: 15px;
+            padding-bottom: 25px;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            padding: 15px;
+        }
+
+        /* Mobile navbar - added styles only */
+.menu-toggle {
+    display: none;
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px 12px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.navbar-collapse {
+    display: flex;
+    align-items: center;
+}
+
+@@media (max-width: 767px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar-collapse {
+        display: none;
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .navbar-collapse.show {
+        display: block;
+    }
+
+    .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding-left: 0;
+        margin-top: 10px;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        display: block;
+        padding: 12px 10px;
+        border-top: 1px solid rgba(255,255,255,0.2);
+    }
+}
+</style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark">
+        <div class="container">
+            @Html.ActionLink(
+"🌾 Kisan Direct",
+"Index",
+"Home",
+new { area = "" },
+new { @class = "navbar-brand" }
+)
+            @if (Session["UserId"] != null)
+            {
+                <button type="button"
+                        class="menu-toggle"
+                        id="menuToggle"
+                        aria-label="Toggle navigation"
+                        aria-expanded="false">
+                    ☰
+                </button>
+            }
+            <div class="navbar-collapse" id="mainNavigation">
+                <ul class="navbar-nav flex-grow-1">
+
+                    @if (Session["UserId"] != null)
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Home", "Index", "Home",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Marketplace", "Index", "Crop",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Sell Crops", "Create", "Farmer",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Research", "Research", "Home",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Weather Forecast", "Index", "Weather",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "About", "About", "Home",
+                                new { area = "" },
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        @* Admin Panel sirf Owner ko dikhega *@
+                        if (Session["Role"] != null &&
+                            Session["Role"].ToString() == "Owner")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink(
+                                    "Admin Panel", "Index", "Admin",
+                                    new { area = "" },
+                                    new { @class = "nav-link" }
+                                )
+                            </li>
+                        }
+
+                        <li class="nav-item" style="padding: 5px 10px;">
+                            @using (Html.BeginForm(
+                                "Logout",
+                                "Account",
+                                FormMethod.Post,
+                                new { style = "display:inline;" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit" class="logout-button">
+                                    Logout
+                                </button>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+
+        <hr />
+
+        <footer>
+            <p>
+                &copy; @DateTime.Now.Year Kisan Direct |
+                Connecting Farmers and Buyers
+            </p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+            (function () {
+                var menuButton = document.getElementById("menuToggle");
+                var navigation = document.getElementById("mainNavigation");
+
+                if (menuButton && navigation) {
+                    menuButton.addEventListener("click", function () {
+                        var isOpen = navigation.classList.toggle("show");
+                        menuButton.setAttribute(
+                            "aria-expanded",
+                            isOpen ? "true" : "false"
+                        );
+                    });
+                }
+            })();
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

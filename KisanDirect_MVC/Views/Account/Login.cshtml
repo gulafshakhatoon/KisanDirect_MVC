@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Login - Kisan Direct";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Kisan Direct</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f7f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            width: 350px;
+            max-width: 90%;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 5px 22px #0002;
+        }
+
+        h2 {
+            color: #176b38;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 18px;
+            background: #176b38;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .message {
+            color: #b42318;
+            text-align: center;
+        }
+
+        a {
+            color: #176b38;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h2>🌱 Kisan Direct</h2>
+        <h3>Login to Your Account</h3>
+
+        @if (ViewBag.Message != null)
+        {
+            <p class="message">@ViewBag.Message</p>
+        }
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <label>Email Address</label>
+            <input type="email" name="email" required maxlength="150" />
+
+            <label>Password</label>
+            <input type="password" name="password" required />
+
+            <button type="submit">Login</button>
+        }
+
+        <p>New farmer? <a href="@Url.Action("Register", "Account")">Create Account</a></p>
+        <p><a href="@Url.Action("Index", "Home")">Back to Home</a></p>
+    </div>
+</body>
+</html>

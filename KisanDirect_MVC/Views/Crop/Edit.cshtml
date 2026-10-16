@@ -1,0 +1,143 @@
+﻿@model System.Data.DataRow
+
+@{
+    ViewBag.Title = "Edit Crop";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Edit Crop - Kisan Direct</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px 15px;
+            font-family: Arial, sans-serif;
+            background: #f3f8f0;
+            color: #243424;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px #00000015;
+        }
+
+        h1 {
+            color: #24733b;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 17px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .save-button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            border: none;
+            border-radius: 6px;
+            background: #24733b;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .back-button {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #24733b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>✏️ Edit Crop</h1>
+        <p>Update the crop details below.</p>
+
+        @using (Html.BeginForm("Edit", "Crop",
+            new { id = Model["CropId"] },
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <label>Crop Name</label>
+            <input type="text"
+                   name="cropName"
+                   value="@Model["CropName"]"
+                   maxlength="100"
+                   required />
+
+            <label>Price per Kg (₹)</label>
+            <input type="number"
+                   name="price"
+                   value="@Model["Price"]"
+                   min="0.01"
+                   step="0.01"
+                   required />
+
+            <label>Available Quantity (Kg)</label>
+            <input type="number"
+                   name="quantity"
+                   value="@Model["Quantity"]"
+                   min="0.01"
+                   step="0.01"
+                   required />
+
+            <label>Location</label>
+            <input type="text"
+                   name="location"
+                   value="@Model["Location"]"
+                   maxlength="150"
+                   required />
+
+            <label>Farmer Mobile Number</label>
+            <input type="tel"
+                   name="mobileNumber"
+                   value="@(Model["MobileNumber"] == DBNull.Value ? "" : Model["MobileNumber"].ToString())"
+                   maxlength="20" />
+
+            <button type="submit" class="save-button">
+                Save Changes
+            </button>
+        }
+
+        <a class="back-button"
+           href="@Url.Action("Index", "Crop")">
+            ← Back to Marketplace
+        </a>
+
+    </div>
+
+</body>
+</html>

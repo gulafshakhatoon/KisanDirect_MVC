@@ -1,0 +1,108 @@
+﻿@model System.Data.DataRow
+
+@{
+    ViewBag.Title = "Edit Farmer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .edit-container {
+        max-width: 600px;
+        margin: 35px auto;
+        padding: 25px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .edit-heading {
+        color: #218838;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+    .save-btn {
+        background: #218838;
+        color: white;
+        padding: 11px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-left: 10px;
+        color: #218838;
+        text-decoration: none;
+    }
+
+    .error-message {
+        background: #fff3cd;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+    }
+</style><div class="edit-container">
+    <h2 class="edit-heading">✏️ Edit Farmer Details</h2>
+
+    @if (TempData["AdminMessage"] != null)
+    {
+        <div class="error-message">
+            @TempData["AdminMessage"]
+        </div>
+    }
+
+    @using (Html.BeginForm("EditUser", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               name="id"
+               value="@Model["UserId"]" />
+
+        <div class="form-group">
+            <label>Farmer Name</label>
+            <input type="text"
+                   name="fullName"
+                   value="@Model["FullName"]"
+                   maxlength="100"
+                   required />
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email"
+                   name="email"
+                   value="@Model["Email"]"
+                   maxlength="150"
+                   required />
+        </div>
+
+        <button type="submit" class="save-btn">
+            Save Changes
+        </button>
+
+        <a href="@Url.Action("Users", "Admin")" class="back-btn">
+            Cancel
+        </a>
+    }
+
+</div>

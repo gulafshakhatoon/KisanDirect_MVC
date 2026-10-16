@@ -1,0 +1,141 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Manage Farmers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .admin-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .admin-heading {
+        color: #218838;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        margin-top: 20px;
+    }
+
+        .admin-table th,
+        .admin-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .admin-table th {
+            background: #218838;
+            color: white;
+        }
+
+    .edit-btn {
+        display: inline-block;
+        background: #ffc107;
+        color: #212529;
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-bottom: 5px;
+    }
+
+        .edit-btn:hover {
+            background: #e0a800;
+            color: #212529;
+            text-decoration: none;
+        }
+
+    .delete-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .delete-btn:hover {
+            background: #b02a37;
+        }
+
+    .message {
+        background: #e8f5e9;
+        padding: 12px;
+        margin: 15px 0;
+        border-radius: 5px;
+    }
+</style><div class="admin-container">
+    <h2 class="admin-heading">👨‍🌾 Manage Farmer Accounts</h2>
+
+    <p>View, edit and delete registered farmer accounts.</p>
+
+    @if (TempData["AdminMessage"] != null)
+    {
+        <div class="message">
+            @TempData["AdminMessage"]
+        </div>
+    }
+
+    @if (Model.Rows.Count == 0)
+    {
+        <p>No farmer accounts registered yet.</p>
+    }
+    else
+    {
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Farmer Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (System.Data.DataRow farmer in Model.Rows)
+                {
+                    <tr>
+                        <td>@farmer["UserId"]</td>
+                        <td>@farmer["FullName"]</td>
+                        <td>@farmer["Email"]</td>
+
+                        <td>
+                            <a href="@Url.Action(
+                            "EditUser",
+                            "Admin",
+                            new { id = farmer["UserId"] })"
+                               class="edit-btn">
+                                Edit
+                            </a>
+
+                            @using (Html.BeginForm(
+                                "DeleteUser",
+                                "Admin",
+                                new { id = farmer["UserId"] },
+                                FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="delete-btn"
+                                        onclick="return confirm('Are you sure? This will permanently delete this farmer account and all crops listed by them.');">
+                                    Delete
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

@@ -1,0 +1,2 @@
+﻿ALTER TABLE dbo.Crops
+ADD FarmerId INT NULL;

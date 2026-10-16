@@ -1,0 +1,8 @@
+﻿CREATE TABLE dbo.Users
+(
+    UserId INT IDENTITY(1,1) PRIMARY KEY,
+    FullName VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) NOT NULL UNIQUE,
+    PasswordHash VARCHAR(255) NOT NULL,
+    Role VARCHAR(20) NOT NULL DEFAULT 'Farmer'
+);

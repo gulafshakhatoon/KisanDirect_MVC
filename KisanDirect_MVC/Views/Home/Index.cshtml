@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<style>
+    .kisan-home {
+        font-family: Arial, sans-serif;
+        color: #24352a;
+    }
+
+    .kisan-nav {
+        background: #174d32;
+        padding: 18px 25px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .kisan-brand {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .kisan-nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 9px;
+    }
+
+    .kisan-hero {
+        background: linear-gradient(120deg, #e0f1d9, #f5fae9);
+        padding: 65px 25px;
+        text-align: center;
+    }
+
+        .kisan-hero h1 {
+            color: #174d32;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .kisan-hero p {
+            font-size: 18px;
+            margin: 20px auto;
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+    .kisan-btn {
+        display: inline-block;
+        background: #247342;
+        color: white !important;
+        text-decoration: none;
+        padding: 13px 25px;
+        border-radius: 7px;
+        margin: 8px;
+    }
+
+    .kisan-section {
+        padding: 45px 20px;
+        text-align: center;
+    }
+
+    .kisan-cards {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 22px;
+        margin-top: 28px;
+    }
+
+    .kisan-card {
+        background: white;
+        border: 1px solid #dce8dc;
+        border-radius: 12px;
+        padding: 25px;
+        width: 280px;
+        box-shadow: 0 4px 12px #00000010;
+    }
+
+        .kisan-card h3 {
+            color: #247342;
+        }
+
+    .kisan-footer {
+        background: #174d32;
+        color: white;
+        padding: 22px;
+        text-align: center;
+    }
+
+    @@media (max-width: 600px) {
+        .kisan-hero h1 {
+            font-size: 30px;
+        }
+
+        .kisan-nav {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="kisan-home">
+
+    <nav class="kisan-nav">
+        <div class="kisan-brand">🌱 Kisan Direct</div>
+
+        <div>
+            <a href="@Url.Action("Index", "Home")">Home</a>
+            <a href="@Url.Action("Index", "Crop")">Marketplace</a>
+            <a href="@Url.Action("Research", "Home")">Research</a>
+            <a href="@Url.Action("About", "Home")">About</a>
+        </div>
+    </nav>
+
+    <section class="kisan-hero">
+        <h1>Farmer Se Seedha Aap Tak</h1>
+
+        <p>
+            Fresh crops, fair prices and direct connections.
+            Kisan Direct helps farmers showcase their crops
+            and helps consumers contact farmers directly
+            without unnecessary middlemen.
+        </p>
+
+        <a class="kisan-btn"
+           href="@Url.Action("Index", "Crop")">
+            Explore Crops
+        </a>
+
+        <a class="kisan-btn"
+           href="@Url.Action("Create", "Farmer")">
+            Sell Your Crops
+        </a>
+    </section>
+
+    <section class="kisan-section">
+        <h2>How Kisan Direct Works</h2>
+
+        <p>Three simple steps to connect farmers and consumers.</p>
+
+        <div class="kisan-cards">
+
+            <div class="kisan-card">
+                <h3>🌾 1. Farmer Lists Crops</h3>
+                <p>
+                    Farmers can list their crops with prices,
+                    quantities and location details.
+                </p>
+            </div>
+
+            <div class="kisan-card">
+                <h3>🛒 2. Consumer Explores</h3>
+                <p>
+                    Consumers can explore available crops
+                    and compare their listed prices.
+                </p>
+            </div>
+
+            <div class="kisan-card">
+                <h3>🤝 3. Direct Contact</h3>
+                <p>
+                    Consumers can contact farmers directly
+                    to discuss purchases.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="kisan-section"
+             style="background:#f2f7ef;">
+
+        <h2>Why Choose Kisan Direct?</h2>
+
+        <div class="kisan-cards">
+
+            <div class="kisan-card">
+                <h3>Fair Prices</h3>
+                <p>Support transparent crop pricing.</p>
+            </div>
+
+            <div class="kisan-card">
+                <h3>Local Farmers</h3>
+                <p>Discover crops from nearby locations.</p>
+            </div>
+
+            <div class="kisan-card">
+                <h3>Direct Connection</h3>
+                <p>Reduce dependence on intermediaries.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="kisan-footer">
+        <h3>🌱 Kisan Direct</h3>
+        <p>Connecting Farmers and Consumers</p>
+        <p>College Community Engagement Project</p>
+    </footer>
+
+</div>

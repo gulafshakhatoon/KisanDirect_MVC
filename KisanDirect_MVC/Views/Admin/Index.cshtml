@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .admin-dashboard {
+        padding: 30px 10px;
+    }
+
+    .admin-heading {
+        color: #176b3a;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .admin-subtitle {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid #e1e8e3;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .admin-number {
+        font-size: 36px;
+        font-weight: bold;
+        color: #176b3a;
+    }
+
+    .admin-button {
+        display: inline-block;
+        background: #176b3a;
+        color: white !important;
+        padding: 11px 20px;
+        border-radius: 7px;
+        text-decoration: none;
+        margin: 5px 5px 5px 0;
+    }
+
+        .admin-button:hover {
+            background: #10532c;
+            text-decoration: none;
+        }
+</style>
+
+<div class="container admin-dashboard">
+
+    <h2 class="admin-heading">Admin Dashboard</h2>
+    <p class="admin-subtitle">
+        Welcome to KisanDirect Administration Panel.
+    </p>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="admin-card">
+                <h4>Total Registered Farmers</h4>
+                <div class="admin-number">
+                    @ViewBag.TotalFarmers
+                </div>
+                <p>Farmers registered on KisanDirect.</p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="admin-card">
+                <h4>Total Crops Listed</h4>
+                <div class="admin-number">
+                    @ViewBag.TotalCrops
+                </div>
+                <p>Crops currently listed in the marketplace.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="admin-card">
+        <h4>Manage Your Website</h4>
+        <p>Manage registered farmers and check crop listings.</p>
+
+        <a href="@Url.Action("Users", "Admin")"
+           class="admin-button">
+            Manage Farmers
+        </a>
+
+        <a href="@Url.Action("Index", "Crop")"
+           class="admin-button">
+            View Marketplace
+        </a>
+
+        <a href="@Url.Action("Index", "Home")"
+           class="admin-button">
+            Back to Home
+        </a>
+    </div>
+
+</div>
